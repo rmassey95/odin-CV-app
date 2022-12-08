@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "../styles/Education.css";
+import "../styles/edu-exp.css";
 
 class Education extends Component {
   constructor(props) {
@@ -55,7 +55,7 @@ class Education extends Component {
       <div>
         {educationArr.map((education) => {
           return (
-            <div key={education.key} className="edu-div">
+            <div key={education.key} className="comp-div">
               {(() => {
                 if (education.edit) {
                   return (
@@ -110,8 +110,8 @@ class Education extends Component {
                         <h1>{education.title}</h1>
                         <p>{education.date}</p>
                       </div>
-                      <p className="edu-school">{education.school}</p>
-                      <p className="edu-highlights">{education.highlights}</p>
+                      <p className="org">{education.school}</p>
+                      <p className="highlights">{education.highlights}</p>
                       <button
                         onClick={() => {
                           setEdit("education", education.key);
@@ -151,7 +151,7 @@ class Education extends Component {
     } = this.props;
 
     return (
-      <div className="education-container">
+      <div className="container">
         <h1>Education</h1>
         {(() => {
           if (education.add) {

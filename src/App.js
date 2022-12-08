@@ -29,74 +29,103 @@ class App extends Component {
     };
   }
 
-  updateGeneralInfo = (e) => {
+  update = (e, component, key = null) => {
     e.preventDefault();
 
-    this.setState({
-      generalInfo: {
-        name: e.target[0].value,
-        address: e.target[1].value,
-        phoneNum: e.target[2].value,
-        email: e.target[3].value,
-        edit: false,
-      },
-    });
+    if (component === "generalInfo") {
+      this.setState({
+        generalInfo: {
+          name: e.target[0].value,
+          address: e.target[1].value,
+          phoneNum: e.target[2].value,
+          email: e.target[3].value,
+          edit: false,
+        },
+      });
+    } else if (component === "education") {
+      let eduUpdate = this.state.educationArr.map((edu) => {
+        if (edu.key === key) {
+          edu.title = e.target[0].value;
+          edu.date = e.target[1].value;
+          edu.school = e.target[2].value;
+          edu.highlights = e.target[3].value;
+          edu.add = false;
+          edu.edit = false;
+        }
+        return edu;
+      });
+
+      this.setState({
+        education: {
+          title: "",
+          date: "",
+          school: "",
+          highlights: "",
+          add: false,
+          edit: false,
+          key: uniqid(),
+        },
+        educationArr: eduUpdate,
+      });
+    }
   };
 
-  handleEduChange = (e) => {
-    this.setState({
-      education: {
-        ...this.state.education,
-        [e.target.name]: e.target.value,
-      },
-    });
+  handleChange = (e, component) => {
+    if (component === "education") {
+      this.setState({
+        education: {
+          ...this.state.education,
+          [e.target.name]: e.target.value,
+        },
+      });
+    }
   };
 
-  addEducation = (e) => {
+  add = (e, component) => {
     e.preventDefault();
 
-    let edu = this.state.education;
+    if (component === "education") {
+      let edu = this.state.education;
 
-    this.setState({
-      education: {
-        title: "",
-        date: "",
-        school: "",
-        highlights: "",
-        add: false,
-        edit: false,
-        key: uniqid(),
-      },
-      educationArr: this.state.educationArr.concat(edu),
-    });
+      this.setState({
+        education: {
+          title: "",
+          date: "",
+          school: "",
+          highlights: "",
+          add: false,
+          edit: false,
+          key: uniqid(),
+        },
+        educationArr: this.state.educationArr.concat(edu),
+      });
+    }
   };
 
-  setEdit = (editPage) => {
-    if (editPage === "generalInfo") {
+  setEdit = (component, key = null) => {
+    if (component === "generalInfo") {
       this.setState({
         generalInfo: {
           ...this.state.generalInfo,
           edit: true,
         },
       });
+    } else if (component === "education") {
+      let eduUpdate = this.state.educationArr.map((edu) => {
+        if (edu.key === key) {
+          edu.edit = true;
+        }
+        return edu;
+      });
+
+      this.setState({
+        educationArr: eduUpdate,
+      });
     }
   };
 
-  setEditEdu = (edukey) => {
-    let eduUpdate = this.state.educationArr.map((edu) => {
-      if (edu.key === edukey) {
-        edu.edit = true;
-      }
-      return edu;
-    });
-
-    this.setState({
-      educationArr: eduUpdate,
-    });
-  };
-
-  setAdd = (addPage) => {
-    if (addPage === "education") {
+  setAdd = (component) => {
+    if (component === "education") {
       this.setState({
         education: {
           ...this.state.education,
@@ -106,41 +135,14 @@ class App extends Component {
     }
   };
 
-  updateEducation = (e, eduKey) => {
-    e.preventDefault();
+  remove = (component, key) => {
+    if (component === "education") {
+      let eduUpdate = this.state.educationArr.filter((edu) => edu.key !== key);
 
-    let eduUpdate = this.state.educationArr.map((edu) => {
-      if (edu.key === eduKey) {
-        edu.title = e.target[0].value;
-        edu.date = e.target[1].value;
-        edu.school = e.target[2].value;
-        edu.highlights = e.target[3].value;
-        edu.add = false;
-        edu.edit = false;
-      }
-      return edu;
-    });
-
-    this.setState({
-      education: {
-        title: "",
-        date: "",
-        school: "",
-        highlights: "",
-        add: false,
-        edit: false,
-        key: uniqid(),
-      },
-      educationArr: eduUpdate,
-    });
-  };
-
-  removeEdu = (eduKey) => {
-    let eduUpdate = this.state.educationArr.filter((edu) => edu.key !== eduKey);
-
-    this.setState({
-      educationArr: eduUpdate,
-    });
+      this.setState({
+        educationArr: eduUpdate,
+      });
+    }
   };
 
   render() {
@@ -150,18 +152,18 @@ class App extends Component {
       <div className="App">
         <GeneralInfo
           generalInfo={generalInfo}
-          updateGeneralInfo={this.updateGeneralInfo}
+          update={this.update}
           setEdit={this.setEdit}
         />
         <Education
           education={education}
-          setEditEdu={this.setEditEdu}
+          setEdit={this.setEdit}
           educationArr={educationArr}
-          addEducation={this.addEducation}
-          handleEduChange={this.handleEduChange}
+          add={this.add}
+          handleChange={this.handleChange}
           setAdd={this.setAdd}
-          updateEducation={this.updateEducation}
-          removeEdu={this.removeEdu}
+          update={this.update}
+          remove={this.remove}
         />
       </div>
     );

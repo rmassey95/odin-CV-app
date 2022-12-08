@@ -6,12 +6,12 @@ class GeneralInfo extends Component {
     super();
   }
 
-  displayForm = (generalInfo, updateGeneralInfo) => {
+  displayForm = (generalInfo, update) => {
     return (
       <form
         className="general-info"
         onSubmit={(e) => {
-          updateGeneralInfo(e);
+          update(e, "generalInfo");
         }}
       >
         <input
@@ -69,13 +69,13 @@ class GeneralInfo extends Component {
   };
 
   render() {
-    const { generalInfo, updateGeneralInfo, setEdit } = this.props;
+    const { generalInfo, update, setEdit } = this.props;
 
     return (
       <div>
         {(() => {
           if (generalInfo.edit) {
-            return this.displayForm(generalInfo, updateGeneralInfo);
+            return this.displayForm(generalInfo, update);
           } else {
             return this.displayOutput(generalInfo, setEdit);
           }

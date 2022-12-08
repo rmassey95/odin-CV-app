@@ -6,16 +6,16 @@ class Education extends Component {
     super();
   }
 
-  displayForm = (addEducation, handleEduChange, education) => {
+  displayForm = (add, handleChange) => {
     return (
       <form
         onSubmit={(e) => {
-          addEducation(e);
+          add(e, "education");
         }}
       >
         <input
           onChange={(e) => {
-            handleEduChange(e);
+            handleChange(e, "education");
           }}
           className="input"
           placeholder="Title"
@@ -23,7 +23,7 @@ class Education extends Component {
         ></input>
         <input
           onChange={(e) => {
-            handleEduChange(e);
+            handleChange(e, "education");
           }}
           className="input"
           placeholder="Date"
@@ -31,7 +31,7 @@ class Education extends Component {
         ></input>
         <input
           onChange={(e) => {
-            handleEduChange(e);
+            handleChange(e, "education");
           }}
           className="input"
           placeholder="School"
@@ -39,7 +39,7 @@ class Education extends Component {
         ></input>
         <textarea
           onChange={(e) => {
-            handleEduChange(e);
+            handleChange(e, "education");
           }}
           className="input textarea"
           placeholder="Notes"
@@ -50,13 +50,7 @@ class Education extends Component {
     );
   };
 
-  displayEducation = (
-    educationArr,
-    setEditEdu,
-    handleEduChange,
-    updateEducation,
-    removeEdu
-  ) => {
+  displayEducation = (educationArr, setEdit, handleChange, update, remove) => {
     return (
       <div>
         {educationArr.map((education) => {
@@ -67,12 +61,12 @@ class Education extends Component {
                   return (
                     <form
                       onSubmit={(e) => {
-                        updateEducation(e, education.key);
+                        update(e, "education", education.key);
                       }}
                     >
                       <input
                         onChange={(e) => {
-                          handleEduChange(e);
+                          handleChange(e, "education");
                         }}
                         defaultValue={education.title}
                         className="input"
@@ -81,7 +75,7 @@ class Education extends Component {
                       ></input>
                       <input
                         onChange={(e) => {
-                          handleEduChange(e);
+                          handleChange(e, "education");
                         }}
                         defaultValue={education.date}
                         className="input"
@@ -90,7 +84,7 @@ class Education extends Component {
                       ></input>
                       <input
                         onChange={(e) => {
-                          handleEduChange(e);
+                          handleChange(e, "education");
                         }}
                         defaultValue={education.school}
                         className="input"
@@ -99,7 +93,7 @@ class Education extends Component {
                       ></input>
                       <textarea
                         onChange={(e) => {
-                          handleEduChange(e);
+                          handleChange(e, "education");
                         }}
                         defaultValue={education.highlights}
                         className="input textarea"
@@ -120,7 +114,7 @@ class Education extends Component {
                       <p className="edu-highlights">{education.highlights}</p>
                       <button
                         onClick={() => {
-                          setEditEdu(education.key);
+                          setEdit("education", education.key);
                         }}
                         className="edit-btn"
                       >
@@ -128,7 +122,7 @@ class Education extends Component {
                       </button>
                       <button
                         onClick={() => {
-                          removeEdu(education.key);
+                          remove("education", education.key);
                         }}
                       >
                         Remove
@@ -147,13 +141,13 @@ class Education extends Component {
   render() {
     const {
       education,
-      setEditEdu,
+      setEdit,
       educationArr,
-      addEducation,
-      handleEduChange,
+      add,
+      handleChange,
       setAdd,
-      updateEducation,
-      removeEdu,
+      update,
+      remove,
     } = this.props;
 
     return (
@@ -161,18 +155,14 @@ class Education extends Component {
         <h1>Education</h1>
         {(() => {
           if (education.add) {
-            return this.displayForm(
-              addEducation,
-              handleEduChange,
-              educationArr
-            );
+            return this.displayForm(add, handleChange);
           } else {
             return this.displayEducation(
               educationArr,
-              setEditEdu,
-              handleEduChange,
-              updateEducation,
-              removeEdu
+              setEdit,
+              handleChange,
+              update,
+              remove
             );
           }
         })()}

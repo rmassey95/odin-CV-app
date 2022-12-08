@@ -3,6 +3,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 .general-info-input {
@@ -12,4 +13,10 @@
 h1,
 p {
   margin: 0;
+}
+
+.edit-btn {
+  position: absolute;
+  right: 0;
+  bottom: 0;
 }

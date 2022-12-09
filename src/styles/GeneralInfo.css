@@ -1,22 +1,13 @@
-.general-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: relative;
+.input {
+  display: block;
+  margin: 10px;
 }
 
-.general-info-input {
-  margin: 5px;
+p,
+label {
+  font-size: 20px;
 }
 
-h1,
 p {
-  margin: 0;
-}
-
-.edit-btn {
-  position: absolute;
-  right: 0;
-  bottom: 0;
+  margin: 10px;
 }

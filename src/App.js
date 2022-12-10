@@ -1,11 +1,20 @@
 import React from "react";
 import GeneralInfo from "./components/GeneralInfo";
+import Education from "./components/Education";
+import Experience from "./components/Experience";
+import ProfDev from "./components/ProfDev";
 import "./styles/App.css";
 
 function App() {
   return (
     <div>
       <GeneralInfo />
+      <h1>Education</h1>
+      <Education />
+      <h1>Experience</h1>
+      <Experience />
+      <h1>Professional Development</h1>
+      <ProfDev />
     </div>
   );
 }

@@ -12,7 +12,6 @@ function GeneralInfo() {
 
   function update(e) {
     e.preventDefault();
-    console.log("PREVENTED DEFAULT");
     setGeneralInfo({ ...generalInfo, edit: false });
   }
 
@@ -23,8 +22,6 @@ function GeneralInfo() {
   function setEdit() {
     setGeneralInfo({ ...generalInfo, edit: true });
   }
-
-  console.log(generalInfo);
 
   if (generalInfo.edit) {
     //display form

@@ -1,126 +1,104 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
+import "../styles/GeneralInfo.css";
+import uniqid from "uniqid";
 
-class ProfDev extends Component {
-  constructor(props) {
-    super();
-  }
+function ProfDev() {
+  const [profDev, setProfDev] = useState({
+    note: "",
+    id: uniqid(),
+    add: true,
+    edit: false,
+  });
+  const [profDevArr, setProfDevArr] = useState([]);
 
-  displayProfDev = (profDevArr, setEdit, handleChange, update, remove) => {
-    return (
-      <div>
-        {profDevArr.map((profDev) => {
-          return (
-            <div key={profDev.key} className="comp-div">
-              {(() => {
-                if (profDev.edit) {
-                  return (
-                    <form
-                      onSubmit={(e) => {
-                        update(e, "profDev", profDev.key);
-                      }}
-                    >
-                      <input
-                        onChange={(e) => {
-                          handleChange(e, "profDev");
-                        }}
-                        defaultValue={profDev.highlights}
-                        className="input"
-                        placeholder="Highlight"
-                        name="highlights"
-                      ></input>
-                      <button>Submit</button>
-                    </form>
-                  );
-                } else {
-                  return (
-                    <ul>
-                      <li>
-                        <p className="highlights">{profDev.highlights}</p>
-                        <button
-                          onClick={() => {
-                            setEdit("profDev", profDev.key);
-                          }}
-                          className="edit-btn"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => {
-                            remove("profDev", profDev.key);
-                          }}
-                        >
-                          Remove
-                        </button>
-                      </li>
-                    </ul>
-                  );
-                }
-              })()}
-            </div>
-          );
-        })}
-      </div>
-    );
+  const handleChange = (e) => {
+    setProfDev({ ...profDev, note: e.target.value });
   };
 
-  displayForm = (add, handleChange) => {
+  const add = (e) => {
+    e.preventDefault();
+
+    let obj = { note: profDev.note, id: profDev.id };
+    setProfDevArr(profDevArr.concat(obj));
+    setProfDev({ note: "", id: uniqid(), add: false, edit: false });
+  };
+
+  const setEdit = (id) => {
+    let [obj] = profDevArr.filter((profDevNote) => profDevNote.id === id);
+    setProfDev({ note: obj.note, id: id, add: false, edit: true });
+  };
+
+  const edit = (e, id) => {
+    e.preventDefault();
+
+    let updateArr = profDevArr.map((profDevNote) => {
+      if (profDevNote.id === id) {
+        let obj = { note: profDev.note, id: id };
+        return obj;
+      }
+      return profDevNote;
+    });
+
+    setProfDevArr(updateArr);
+    setProfDev({ note: "", id: uniqid(), add: false, edit: false });
+  };
+
+  const setAdd = () => {
+    setProfDev({ ...profDev, add: true });
+  };
+
+  const remove = (id) => {
+    let updateArr = profDevArr.filter((profDev) => profDev.id !== id);
+
+    setProfDevArr(updateArr);
+  };
+
+  if (profDev.add || profDev.edit) {
     return (
       <form
         onSubmit={(e) => {
-          add(e, "profDev");
+          profDev.edit ? edit(e, profDev.id) : add(e);
         }}
       >
+        <label htmlFor="note">Note: </label>
         <input
           onChange={(e) => {
-            handleChange(e, "profDev");
+            handleChange(e);
           }}
-          className="input"
-          placeholder="Highlight"
-          name="highlights"
+          id="note"
+          name="note"
+          value={profDev.note}
         ></input>
         <button>Submit</button>
       </form>
     );
-  };
-
-  render() {
-    const {
-      profDev,
-      profDevArr,
-      setEdit,
-      add,
-      handleChange,
-      setAdd,
-      update,
-      remove,
-    } = this.props;
-
-    return (
-      <div className="container">
-        <h1>Professional Development</h1>
-        {(() => {
-          if (profDev.add) {
-            return this.displayForm(add, handleChange);
-          } else {
-            return this.displayProfDev(
-              profDevArr,
-              setEdit,
-              handleChange,
-              update,
-              remove
-            );
-          }
-        })()}
-        <button
-          onClick={() => {
-            setAdd("profDev");
-          }}
-        >
-          Add Professional Development
-        </button>
-      </div>
-    );
   }
+  return (
+    <div>
+      {profDevArr.map((profDevNote) => {
+        return (
+          <div key={profDevNote.id}>
+            <p>{profDevNote.note}</p>
+            <button
+              onClick={() => {
+                setEdit(profDevNote.id);
+              }}
+            >
+              Edit
+            </button>
+            <button
+              onClick={() => {
+                remove(profDevNote.id);
+              }}
+            >
+              Remove
+            </button>
+          </div>
+        );
+      })}
+      <button onClick={setAdd}>Add Professional Development</button>
+    </div>
+  );
 }
 
 export default ProfDev;

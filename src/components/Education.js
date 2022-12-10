@@ -1,181 +1,176 @@
-import React, { Component } from "react";
-import "../styles/edu-exp.css";
+import React, { useState } from "react";
+import "../styles/GeneralInfo.css";
+import uniqid from "uniqid";
 
-class Education extends Component {
-  constructor(props) {
-    super();
-  }
+const Education = () => {
+  const [education, setEducation] = useState({
+    title: "",
+    date: "",
+    school: "",
+    highlights: "",
+    add: true,
+    edit: false,
+    key: uniqid(),
+  });
 
-  displayForm = (add, handleChange) => {
+  const [educationArr, setEducationArr] = useState([]);
+
+  const edit = (e, key) => {
+    e.preventDefault();
+
+    let updatedArr = educationArr.map((edu) => {
+      if (edu.key === key) {
+        let obj = {
+          title: education.title,
+          date: education.date,
+          school: education.school,
+          highlights: education.highlights,
+          key: key,
+        };
+        return obj;
+      }
+      return edu;
+    });
+
+    setEducation({
+      title: "",
+      date: "",
+      school: "",
+      highlights: "",
+      add: false,
+      edit: false,
+      key: uniqid(),
+    });
+    setEducationArr(updatedArr);
+  };
+
+  const setAdd = () => {
+    setEducation({
+      title: "",
+      date: "",
+      school: "",
+      highlights: "",
+      add: true,
+      edit: false,
+      key: uniqid(),
+    });
+  };
+
+  const add = (e) => {
+    e.preventDefault();
+    setEducation({ ...education, add: false });
+
+    let obj = {
+      title: education.title,
+      date: education.date,
+      school: education.school,
+      highlights: education.highlights,
+      key: education.key,
+    };
+    setEducationArr(educationArr.concat(obj));
+  };
+
+  const setEdit = (key) => {
+    let [element] = educationArr.filter((edu) => edu.key === key);
+    element.add = false;
+    element.edit = true;
+    setEducation(element);
+  };
+
+  const handleChange = (e) => {
+    setEducation({ ...education, [e.target.name]: e.target.value });
+  };
+
+  const remove = (key) => {
+    let updatedArr = educationArr.filter((edu) => edu.key !== key);
+    setEducationArr(updatedArr);
+  };
+
+  if (education.edit || education.add) {
     return (
       <form
         onSubmit={(e) => {
-          add(e, "education");
+          education.edit ? edit(e, education.key) : add(e);
         }}
       >
-        <input
-          onChange={(e) => {
-            handleChange(e, "education");
-          }}
-          className="input"
-          placeholder="Title"
-          name="title"
-        ></input>
-        <input
-          onChange={(e) => {
-            handleChange(e, "education");
-          }}
-          className="input"
-          placeholder="Date"
-          name="date"
-        ></input>
-        <input
-          onChange={(e) => {
-            handleChange(e, "education");
-          }}
-          className="input"
-          placeholder="School"
-          name="school"
-        ></input>
-        <textarea
-          onChange={(e) => {
-            handleChange(e, "education");
-          }}
-          className="input textarea"
-          placeholder="Notes"
-          name="highlights"
-        ></textarea>
+        <div className="input">
+          <label htmlFor="title">Degree: </label>
+          <input
+            onChange={(e) => {
+              handleChange(e);
+            }}
+            name="title"
+            id="title"
+            value={education.title}
+          ></input>
+        </div>
+        <div className="input">
+          <label htmlFor="date">Date: </label>
+          <input
+            onChange={(e) => {
+              handleChange(e);
+            }}
+            name="date"
+            id="date"
+            value={education.date}
+          ></input>
+        </div>
+        <div className="input">
+          <label htmlFor="school">School: </label>
+          <input
+            onChange={(e) => {
+              handleChange(e);
+            }}
+            name="school"
+            id="school"
+            value={education.school}
+          ></input>
+        </div>
+        <div className="input">
+          <label htmlFor="highlights">Notes: </label>
+          <input
+            onChange={(e) => {
+              handleChange(e);
+            }}
+            name="highlights"
+            id="highlights"
+            value={education.highlights}
+          ></input>
+        </div>
         <button>Submit</button>
       </form>
     );
-  };
-
-  displayEducation = (educationArr, setEdit, handleChange, update, remove) => {
+  } else {
     return (
       <div>
-        {educationArr.map((education) => {
+        {educationArr.map((edu) => {
           return (
-            <div key={education.key} className="comp-div">
-              {(() => {
-                if (education.edit) {
-                  return (
-                    <form
-                      onSubmit={(e) => {
-                        update(e, "education", education.key);
-                      }}
-                    >
-                      <input
-                        onChange={(e) => {
-                          handleChange(e, "education");
-                        }}
-                        defaultValue={education.title}
-                        className="input"
-                        placeholder="Title"
-                        name="title"
-                      ></input>
-                      <input
-                        onChange={(e) => {
-                          handleChange(e, "education");
-                        }}
-                        defaultValue={education.date}
-                        className="input"
-                        placeholder="Date"
-                        name="date"
-                      ></input>
-                      <input
-                        onChange={(e) => {
-                          handleChange(e, "education");
-                        }}
-                        defaultValue={education.school}
-                        className="input"
-                        placeholder="School"
-                        name="school"
-                      ></input>
-                      <textarea
-                        onChange={(e) => {
-                          handleChange(e, "education");
-                        }}
-                        defaultValue={education.highlights}
-                        className="input textarea"
-                        placeholder="Notes"
-                        name="highlights"
-                      ></textarea>
-                      <button>Submit</button>
-                    </form>
-                  );
-                } else {
-                  return (
-                    <div>
-                      <div className="title-date">
-                        <h1>{education.title}</h1>
-                        <p>{education.date}</p>
-                      </div>
-                      <p className="org">{education.school}</p>
-                      <p className="highlights">{education.highlights}</p>
-                      <button
-                        onClick={() => {
-                          setEdit("education", education.key);
-                        }}
-                        className="edit-btn"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => {
-                          remove("education", education.key);
-                        }}
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  );
-                }
-              })()}
+            <div key={edu.key}>
+              <p>{edu.title}</p>
+              <p>{edu.date}</p>
+              <p>{edu.school}</p>
+              <p>{edu.highlights}</p>
+              <button
+                onClick={() => {
+                  setEdit(edu.key);
+                }}
+              >
+                Edit
+              </button>
+              <button
+                onClick={() => {
+                  remove(edu.key);
+                }}
+              >
+                Remove
+              </button>
             </div>
           );
         })}
-      </div>
-    );
-  };
-
-  render() {
-    const {
-      education,
-      setEdit,
-      educationArr,
-      add,
-      handleChange,
-      setAdd,
-      update,
-      remove,
-    } = this.props;
-
-    return (
-      <div className="container">
-        <h1>Education</h1>
-        {(() => {
-          if (education.add) {
-            return this.displayForm(add, handleChange);
-          } else {
-            return this.displayEducation(
-              educationArr,
-              setEdit,
-              handleChange,
-              update,
-              remove
-            );
-          }
-        })()}
-        <button
-          onClick={() => {
-            setAdd("education");
-          }}
-        >
-          Add Education
-        </button>
+        <button onClick={setAdd}>Add Education</button>
       </div>
     );
   }
-}
+};
 
 export default Education;
